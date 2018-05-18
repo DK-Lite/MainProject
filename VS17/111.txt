@@ -1,0 +1,162 @@
+int uIntlen(int n) {
+	int cnt = 0;
+	while (n) {
+		n /= 10;
+		cnt++;
+	}
+	return cnt;
+}
+
+
+bool uIntSame(int n) {
+
+	int s[100];
+
+	int len = 0;
+	while(n) {
+		s[len++] = n % 10;
+		n /= 10;
+	}
+
+	for (int i = 0; i < len / 2; i++) {
+		if (s[i] != s[len - 1 - i]) return false;
+	}
+	return true;
+}
+
+
+
+	/*int n;
+	cin >> n;
+
+	int s[100];
+	for (int i = 0; i < n; i++) {
+		cin >> s[i];
+	}
+
+
+	for (int i = 0; i < n-1; i++) {
+		for (int j = i + 1; j < n; j++) {
+			if (s[i] > s[j]) {
+				int tmp = s[i];
+				s[i] = s[j];
+				s[j] = tmp;
+			}
+		}
+	}
+
+
+
+
+
+
+
+	for (int i = 0; i < n; i++) {
+		cout << s[i] << " ";
+	}
+	cout << endl;*/
+
+
+
+https://www.acmicpc.net/problem/10757
+
+9223372036854775807 9223372036854775808
+
+#include <iostream>
+#include <string.h>
+#pragma warning(disable:4996)
+using namespace std;
+
+int main() {
+
+	char a[100000], b[100000], temp[100000];
+	cin >> a >> b;
+
+	if (strlen(a) > strlen(b))
+	{
+		for (int i = 0; i < strlen(a) - strlen(b); i++)
+		{
+			temp[i] = '0';
+			strcpy(temp + i + 1, b);
+			strcpy(b, temp);
+		}
+	}
+	else if (strlen(a) < strlen(b))
+	{
+		for (int i = 0; i < strlen(b) - strlen(a); i++)
+		{
+			temp[i] = '0';
+			strcpy(temp + i + 1, a);
+			strcpy(a, temp);
+		}
+	}
+	int carry = 0, sum = 0;
+	int lenth = strlen(a);
+	for (int i = lenth - 1; i > -1; i--)
+	{
+		sum = (a[i] - '0' + b[i] - '0' + carry) % 10;
+		temp[i] = sum + '0';
+		carry = (a[i] - '0' + b[i] - '0') / 10;
+	}
+	if (carry > 0)
+	{
+		for (int i = lenth; i > -1; i--)
+		{
+			temp[i] = temp[i - 1];
+		}
+		temp[0] = carry + '0';
+		lenth++;
+	}
+	for (int i = 0; i < lenth; i++)
+	{
+		cout << temp[i];
+	}
+}
+
+/// 링크드 리스트
+#include <iostream>
+using namespace std;
+struct NODE{
+	int data;
+	NODE * nextNode;
+};
+void push(NODE **Head, int a) {
+
+	if ( (*Head) == NULL) {
+		(*Head) = new NODE();
+		(*Head)->data = a;
+		(*Head)->nextNode = NULL;
+		return;
+	}
+
+	NODE *ptr = (*Head);
+	while (ptr->nextNode != NULL){
+		ptr = ptr->nextNode;
+	}
+	ptr->nextNode = new NODE();
+	ptr = ptr->nextNode;
+	ptr->data = a;
+	ptr->nextNode = NULL;
+}
+void prinfALl(NODE **head) {
+	NODE *ptr = (*head);
+	while (ptr != NULL) {
+		cout << ptr->data << " ";
+		ptr = ptr->nextNode;
+	}
+}
+
+int main() {
+	int n;
+	cin >> n;
+
+	NODE *Head = NULL;
+	for (int i = 0; i < n; i++) {
+		int value;
+		cin >> value;
+		push(&Head,value);
+	}
+
+	prinfALl(&Head);
+	cout << endl;
+}
