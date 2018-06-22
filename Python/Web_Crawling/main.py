@@ -1,18 +1,28 @@
-from bs4 import BeautifulSoup
-import urllib
-import urllib.request
-import urllib.parse
-import requests
+# standard
+import threading
 
-if __name__ == "__main__":
-    print("start")
+# install package
+import pymongo
 
-
+#user function
+from Clien_ver import *
 
 
-    html = urllib.urlopen('http://gall.dcinside.com/board/lists/?id=japanese')
+  
+term = 3
+last_time = '0000-00-00 00:00:00'
 
-    soup = BeautifulSoup(html, "lxml")
+def startTimer():
+    global last_time
 
-    print(soup) 
+    clien_list, last_time = get_title_list(last_time)
+    
 
+    for i in range(len(clien_list)):
+        print(clien_list[i])
+
+    timer = threading.Timer(term, startTimer)
+    timer.start()
+ 
+if __name__ == '__main__':
+    startTimer()
