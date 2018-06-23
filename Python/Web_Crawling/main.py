@@ -5,24 +5,27 @@ import threading
 import pymongo
 
 #user function
-from Clien_ver import *
+#from Clien_ver import *
+from DKCrawling import *
 
-
-  
 term = 3
-last_time = '0000-00-00 00:00:00'
 
 def startTimer():
-    global last_time
 
-    clien_list, last_time = get_title_list(last_time)
-    
+    #get titles in all site
+    titles = all_site_title()
 
-    for i in range(len(clien_list)):
-        print(clien_list[i])
+    #print titles
+    for i in range(len(titles)):
+        print(titles[i])
 
+    # timer standard logic
     timer = threading.Timer(term, startTimer)
     timer.start()
  
+
+ #main start point
 if __name__ == '__main__':
     startTimer()
+
+    
