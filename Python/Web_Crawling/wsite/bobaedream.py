@@ -14,11 +14,13 @@ class WebCrawler:
         self.title_list = []
 
     def run(self):
+        # init
+        self.title_list = []
+
         # approach site 
         sess = requests.Session()
         res = sess.get(BOBAEDREAM_COMMUNITY_URL)
         soup = BeautifulSoup(res.content, 'html.parser')
-
 
         # get title
         table = soup.find_all('tr', {'itemtype' : 'http://schema.org/Article'})
@@ -30,8 +32,8 @@ class WebCrawler:
             #select effective title 
             if( number[0].text > self.last_number ):
                 self.last_number = number[0].text
-                self.title_list.append(title[0].text)
-        
+                self.title_list.append("[bobae]"+title[0].text)
+
     def get_list(self):
         return self.title_list
         
