@@ -33,7 +33,7 @@ class WebCrawler:
             #select effective title 
             if( time[0].text > self.last_time ):
                 self.last_time = time[0].text
-                self.title_list.append("[clien]:"+title[0].text)
+                self.title_list.append(title[0].text)
 
         #print(self.last_time)
 

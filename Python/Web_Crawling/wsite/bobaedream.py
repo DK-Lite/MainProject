@@ -32,7 +32,7 @@ class WebCrawler:
             #select effective title 
             if( number[0].text > self.last_number ):
                 self.last_number = number[0].text
-                self.title_list.append("[bobae]"+title[0].text)
+                self.title_list.append(title[0].text)
 
     def get_list(self):
         return self.title_list
