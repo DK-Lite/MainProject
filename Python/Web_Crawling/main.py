@@ -7,6 +7,7 @@ import pymongo
 #user function
 from DKCrawling import *
 from mongodb import *
+from Konlpy import *
 
 term = 3
 ip = '127.0.0.1'
@@ -21,7 +22,11 @@ def startTimer():
     #print titles
     for title in titles:
         db.insert_str(title)
+        print("-----------------------------------------------------")
         print(title)
+        print(konlpy_api(title))
+        break
+
 
     # timer standard logic
     timer = threading.Timer(term, startTimer)
