@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 
 FOLDER_PATH = os.path.dirname(__file__) + '/'
-NAVER_BREAKING_NEWS_URL = 'http://news.naver.com/main/list.nhn?mode=LSD&mid=sec&sid1=001'
+NAVER_BREAKING_NEWS_URL = 'http://m.news.naver.com/officeMain.nhn'
 
 
 # open URL
@@ -19,7 +19,7 @@ def get_text(URL) :
     html = open_Url(URL)
 
     #get article
-    divs = html.find_all('div', {'id' : 'articleBodyContents'})
+    divs = html.find_all('div', {'id' : 'dic_area'})
 
     #write text
     text = ""
@@ -28,6 +28,7 @@ def get_text(URL) :
  
     return text
  
+
  # clean text 
 def clean_text(text):
     cleaned_text = re.sub('[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]','', text)
@@ -37,17 +38,20 @@ def clean_text(text):
 # get all headline
 def get_headlines(html):
 
-    divs = html.find_all('div', {'class' : 'list_body newsflash_body'})
+    divs = html.find_all('ul', {'class' : 'press_newsflash_ct'})
     headlines = divs[0].find_all('li')
 
     list = []
     for headline in headlines:
 
-        info     = headline.find_all('a')[1]
+        #info     = headline.find_all('a')[0]
 
-        _title   = clean_text(info.text)
-        _url     = info.attrs['href']
-        _article = get_text(_url)
+        #_title   = clean_text(info.text)
+        _title   = headline.find_all('strong', {'class' : 'press_newsflash_headline'})[0].text
+        _title   = clean_text(_title)
+        _url     = headline.find_all('a')[0].attrs['href']
+        _article = get_text('http://m.news.naver.com' + _url)
+        _article = clean_text(_article)
 
         list.append( 
             {
@@ -81,7 +85,7 @@ def main():
     for list in lists:
         file_name   = list['title'] + '.txt'
         file_text   = list['article']
-        file_writer(FOLDER_PATH + file_name, file_text)
+        file_writer('/'+ file_name, file_text)
 
 
 # run 
