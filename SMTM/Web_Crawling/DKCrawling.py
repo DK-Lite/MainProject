@@ -1,5 +1,5 @@
 
-from wsite import bobaedream, clien
+from wsite.notice import bobaedream, clien
 
 class DKCrawler :
 

@@ -39,22 +39,6 @@ class WebCrawler:
         
 
 
-def print_crawler(crawler):
-    list = crawler.get_list()
-    list_len = len(list)
-    for i in range(list_len):
-        print(list[i])
-
-#debug 
-TEST = 0
-#site test
-if TEST == 1 :
-    crawler = WebCrawler()
-    crawler.run()
-    print_crawler(crawler)
-    #return crawler.get_list()
-
-
 
 
 

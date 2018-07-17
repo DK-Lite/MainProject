@@ -7,44 +7,6 @@ import requests
 FOLDER_PATH = os.path.dirname(__file__) + '/'
 NAVER_BREAKING_NEWS_URL = 'http://m.news.naver.com/officeMain.nhn'
 
-companys = {
-    'AP연합뉴스',
-    'enews24',
-    'EPA연합뉴스',
-    'KBS 연예',
-    'MBC연예',
-    'MBN',
-    'MK스포츠 ',
-    'OSEN',
-    'TV리포트',
-    'YTN',
-    '경향신문',
-    '노컷뉴스',
-    '뉴스1',
-    '뉴시스',
-    '데일리안',
-    '매일경제',
-    '머니S',
-    '머니투데이',
-    '서울경제',
-    '스타뉴스',
-    '스포츠서울',
-    '스포츠조선',
-    '스포티비뉴스',
-    '엑스포츠뉴스',
-    '여성신문',
-    '연합뉴스',
-    '인터풋볼',
-    '조선일보',
-    '조이뉴스24',
-    '중앙일보',
-    '파이낸셜뉴스',
-    '한국경제',
-    '한국경제TV',
-    '한국일보',
-    '헤럴드POP'
-}
-
 term = 10
 
 # open URL
@@ -62,6 +24,16 @@ def get_effective_article(html) :
     if html.find_all('div', {'id' : 'contentArea'}):
         return html.find_all('div', {'id' : 'contentArea'})[0].text
 
+    if html.find_all('article', {'class' : 'main_article'}):
+        return html.find_all('article', {'class' : 'main_article'})[0].text
+
+    return ""
+
+def get_effective_time(html) :
+
+    if html.find_all('span', {'class' : 'media_end_head_info_datestamp_time'}):
+        return html.find_all('span', {'class' : 'media_end_head_info_datestamp_time'})[0].text
+
     return ""
 
 # get text in site
@@ -70,21 +42,24 @@ def get_article_parser(URL) :
     html = open_Url(URL)
 
     #get article and time
-    _article = get_effective_article(html)
-    _time = html.find_all('span', {'class' : 'media_end_head_info_datestamp_time'})[0].text
+    _article    = get_effective_article(html)
+    _time       = get_effective_time(html)
 
     return _article, _time
  
  # clean text 
 def clean_text(text):
     cleaned_text = re.sub('[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]','', text)
-    cleaned_text = cleaned_text.strip(' \t\n\r')
+    cleaned_text = cleaned_text.strip('\t')
+    cleaned_text = cleaned_text.strip('\n')
+    cleaned_text = cleaned_text.strip('\r')
+
     return cleaned_text
 
 # get all headline
-def get_headlines(URL):
+def get_headlines():
 
-    html = open_Url(URL)
+    html = open_Url(NAVER_BREAKING_NEWS_URL)
     divs = html.find_all('ul', {'class' : 'press_newsflash_ct'})
     headlines = divs[0].find_all('li')
 
@@ -116,27 +91,47 @@ def file_writer(path, str):
 
 
 # main fuc
-def startTimer():
+def print_log(list) :
+    log_msg = ""
 
-    lists = get_headlines(NAVER_BREAKING_NEWS_URL)
+    _title      = list['title']
+    _url        = list['url']
+    _article    = list['article']
+    _company    = list['company']
+    _time       = list['time']
 
-    for list in lists:
+    if _title == "" or _url == "" or _article == "" or _company == "" or _time == "":
+        log_msg = log_msg + "--------start log--------" + "\n"
+        log_msg = log_msg + "_title" + "\n"
+        log_msg = log_msg + "_url" + "\n"
+        log_msg = log_msg + "_article" + "\n"
+        log_msg = log_msg + "_company" + "\n"
+        log_msg = log_msg + "_time" + "\n"
+        log_msg = log_msg + "--------end log----------" + "\n"
 
-        # clean text 
 
 
-        file_name   = list['company'] + '.txt'
-        file_text   = list['article']
-        file_writer("./" + file_name, file_text)
+# def startTimer():
 
-    # timer standard logic
-    timer = threading.Timer(term, startTimer)
-    timer.start()
+#     lists = get_headlines()
+
+#     for list in lists:
+
+#         # clean text 
+#         file_name   = clean_text(list['title']) + '.txt'
+#         file_text   = list['article']
+#         file_writer("./" + file_name, file_text)
+        
+#         print_log(list)
+
+#     # timer standard logic
+#     timer = threading.Timer(term, startTimer)
+#     timer.start()
 
 
  #main start point
-if __name__ == '__main__':
-    startTimer()
+#if __name__ == '__main__':
+    #startTimer()
 
 
 

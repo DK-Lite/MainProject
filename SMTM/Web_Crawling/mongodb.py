@@ -7,7 +7,7 @@ class DKDatabase:
 
     def connect(self, ip, port):
         self.connection = pymongo.MongoClient(ip, port)
-        self.db = self.connection.WebSiteTitle
+        self.db = self.connection.NaverNews
         self.users = self.db.users
 
 
@@ -26,5 +26,8 @@ class DKDatabase:
             'title' : str
         }
         self.insert(doc)
+
+    def insert_list(self, list):
+        self.insert(list)
 
 
