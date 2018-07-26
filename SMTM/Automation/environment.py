@@ -5,19 +5,19 @@ class Envinorment:
     
     PRICE_IDX = 4 
     
-    def __init__(self, char_data=None):
-        self.char_data = char_data
+    def __init__(self, chart_data=None):
+        self.chart_data = chart_data
         self.observation =None
         self.idx = -1
 
     def reset(self):
-        self. observation = None
+        self.observation = None
         self.idx = -1
 
     def observe(self):
-        if len(self.char_data) > self.idx + 1:
+        if len(self.chart_data) > self.idx + 1:
             self.idx += 1
-            self.observation = self.char_data.iloc[self.idx]
+            self.observation = self.chart_data.iloc[self.idx]
             return self.observation
 
         return None

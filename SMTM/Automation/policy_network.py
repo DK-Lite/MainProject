@@ -15,9 +15,9 @@ class PolicyNetwork:
         self.model = Sequential()
         self.model.add(LSTM(256, input_shape=(1, input_dim), return_sequences=True, stateful=False, dropout=0.5))
         self.model.add(BatchNormalizeation())
-        self.modle.add(LSTM(256, return_sequences=True, stateful=False, dropout=0.5))
+        self.model.add(LSTM(256, return_sequences=True, stateful=False, dropout=0.5))
         self.model.add(BatchNormalizeation())
-        self.modle.add(LSTM(256, return_sequences=True, stateful=False, dropout=0.5))
+        self.model.add(LSTM(256, return_sequences=True, stateful=False, dropout=0.5))
         self.model.add(BatchNormalizeation())
         self.model.add(Dense(ouput_dim))
         self.model.add(Activation('sigmoid'))
@@ -37,10 +37,10 @@ class PolicyNetwork:
 
     def save_model(self,model_path):
         if model_path is not None and self.model is not None:
-            self.model.save_weights(mode_path, overwrite=True)
+            self.model.save_weights(model_path, overwrite=True)
         
-    def load_model(sefl, model_path):
+    def load_model(self, model_path):
         if model_path is not None:
-            self.mode.load_weights(model_path)
+            self.model.load_weights(model_path)
 
         

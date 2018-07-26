@@ -18,14 +18,14 @@ class Agent:
 
     def __init__(
         self, envinorment, min_trading_unit = 1, max_trading_unit = 2,
-        delayed_reward_treshold = .05):
+        delayed_reward_threshold = .05):
 
         self.envinorment                = envinorment
 
         #최소 매매단위, 최대매매단위, 지연보상 임계치
         self.min_trading_unit           = min_trading_unit
         self.max_trading_unit           = max_trading_unit
-        self.delayed_reward_treshold    = delayed_reward_treshold
+        self.delayed_reward_threshold    = delayed_reward_threshold
 
 
         self.initial_balance        = 0 # 초기 자본금
@@ -69,7 +69,7 @@ class Agent:
     def decide_action(self, policy_network, sample, epsilon):
         confidence = 0
 
-        if np.random.rand() < epsilon:
+        if np.random.ranf() < epsilon:
             exploration = True
             action = np.random.randint(self.NUM_ACTIONS)
         else:
@@ -83,7 +83,7 @@ class Agent:
     def validate_action(self, action):
         validity = True
         if action == Agent.ACTION_BUY :
-            if self.balance < self.envinorment.get_price() * ( 1 + self.TRADING_CHARGE) * self.min_trading_unit
+            if self.balance < self.envinorment.get_price() * ( 1 + self.TRADING_CHARGE) * self.min_trading_unit:
                 validity = False
         elif action == Agent.ACTION_SELL :
             if self.num_stocks <= 0:
@@ -97,7 +97,7 @@ class Agent:
         added_trading = max(min(int(confidence * (self.max_trading_unit - self.min_trading_unit)), self.max_trading_unit - self.min_trading_unit), 0)
         return self.min_trading_unit + added_trading
 
-    def act(sef, action, confidence):
+    def act(self, action, confidence):
         if not self.validate_action(action):
             action = Agent.ACTION_HOLD
 
@@ -112,7 +112,7 @@ class Agent:
             if balance < 0 :
                 trading_unit = max(min(int(self.balance / (curr_price * (1 + self.TRADING_CHARGE))), self.max_trading_unit), self.min_trading_unit)
             
-            invest_amount    = curr_price * ( 1 * self.TRADING_CHARGE) * trading_unit
+            invest_amount    = curr_price * ( 1 + self.TRADING_CHARGE) * trading_unit
             self.balance    -= invest_amount
             self.num_stocks += trading_unit
             self.num_buy    += 1
@@ -135,15 +135,15 @@ class Agent:
         
         profit_loss = ( (self.portfolio_value - self.base_portfolio_value) / self.base_portfolio_value )
 
-        self.immediate_reward = 1 if profit_loss > = 0 else -1
+        self.immediate_reward = 1 if profit_loss >= 0 else -1 
 
-        if profit_loss > self.delayed_reward_treshold :
+        if profit_loss > self.delayed_reward_threshold :
             delayed_reward = 1
             self.base_portfolio_value = self.portfolio_value
-        elif profit_loss < -self.delayed_reward_treshold :
+        elif profit_loss < -self.delayed_reward_threshold :
             delayed_reward = -1
             self.base_portfolio_value = self.portfolio_value
-        else
+        else :
             delayed_reward = 0
             
         return self.immediate_reward, delayed_reward
