@@ -10,7 +10,7 @@ class Agent:
     TRADING_CHARGE  = 0 #0.015
     TRADING_TAX     = 0 #0.3
 
-    ACTION_BUY = 0
+    ACTION_BUY  = 0
     ACTION_SELL = 1
     ACTION_HOLD = 2
     ACTIONS = [ACTION_BUY, ACTION_SELL]
@@ -74,7 +74,7 @@ class Agent:
             action = np.random.randint(self.NUM_ACTIONS)
         else:
             exploration = False
-            probs = policy_network.prdict(sample)
+            probs = policy_network.predict(sample)
             action = np.argmax(probs)
             confidence = 1 + probs[action]
         
