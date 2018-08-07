@@ -187,6 +187,30 @@ class PolicyLearner:
     def _get_batch(self, memory, batch_size, discount_factor, delay_reward):
         x = np.zeros((batch_size, 1, self.num_features))
         y = np.full((batch_size, self.agent.NUM_ACTIONS), 0.5)
+
+        for i, (sample, action, reward) in enumerate(reversed(memory[-batch_size:])):
+            x[i] = np.array(sample).reshape((-1, 1, self.num_features))
+            y[i, action] = (delayed_reward + 1) /2
+            if discount_factor > 0:
+                y[i, action] *= discount_factor ** i
+        return x, y
+
+
+    
+    def _build_sample(self):
+        self.environment.observe()
+        if len(self.training_data) > self.training_data_idx + 1:
+            self.training_data_idx += 1
+            self.sample = self.training_data.iloc[self.training_data_idx].tolist()
+            self.sample.extend(self.agent.get_states())
+            return self.sample
+        return None
+    
+    def trade(self, model_path = None, balance= 20000000):
+        if model_path is None:
+            return
+        self.policy_network.load_model(model_path=model_path)
+        self.fit(balance=balance, num_epoches = 1, learning = False)
         
 
     
@@ -196,7 +220,7 @@ class PolicyLearner:
 
 
 
-                
+
 
 
 
