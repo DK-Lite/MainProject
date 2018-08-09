@@ -184,7 +184,7 @@ class PolicyLearner:
             locale.currency(max_portfolio_value, grouping=True), epoch_win_cnt))
 
     
-    def _get_batch(self, memory, batch_size, discount_factor, delay_reward):
+    def _get_batch(self, memory, batch_size, discount_factor, delayed_reward):
         x = np.zeros((batch_size, 1, self.num_features))
         y = np.full((batch_size, self.agent.NUM_ACTIONS), 0.5)
 
