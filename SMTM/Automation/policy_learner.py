@@ -49,8 +49,8 @@ class PolicyLearner:
         discount_factor=0, start_epsilon=.0, learning=True):
 
         logger.info("LR: {lr}, DF : {discount_factor}, "
-                    "TU: [{min_tading_unit}, {max_trading_unit}], "
-                    "DRT: {delay_reward_threshold}".format(
+                    "TU: [{min_trading_unit}, {max_trading_unit}], "
+                    "DRT: {delayed_reward_threshold}".format(
                         lr = self.policy_network.lr,
                         discount_factor = discount_factor,
                         min_trading_unit = self.agent.min_trading_unit,
@@ -73,6 +73,7 @@ class PolicyLearner:
         epoch_win_cnt = 0
 
         for epoch in range(num_epoches):
+            print("Step Epoch : ", epoch)
             loss                = 0
             itr_cnt             = 0
             win_cnt             = 0
@@ -98,7 +99,7 @@ class PolicyLearner:
             #self.visualizer.clear([0 , len(self.chart_data)])
 
             if learning :
-                epsilon = start_epsilon * (1, - float(epoch) / (num_epoches -1 ))
+                epsilon = start_epsilon * (1 - float(epoch) / (num_epoches -1 ))
             else :
                 epsilon = 0
 
@@ -110,6 +111,7 @@ class PolicyLearner:
                 action, confidence, exploration = self.agent.decide_action( self.policy_network, self.sample, epsilon)
 
                 immediate_reward, delay_reward = self.agent.act(action, confidence)
+
 
 
 
@@ -142,19 +144,19 @@ class PolicyLearner:
                 x, y = self._get_batch(
                     memory, batch_size, discount_factor, delay_reward)
 
-            if len(x) > 0 :
-                if delay_reward > 0 :
-                    pos_learning_cnt += 1
-                else :
-                    neg_learning_cnt += 1
-                loss += self.policy_network.train_on_batch(x, y)
-                memory_learning_idx.append(itr_cnt, delay_reward)
+                if len(x) > 0 :
+                    if delay_reward > 0 :
+                        pos_learning_cnt += 1
+                    else :
+                        neg_learning_cnt += 1
+                    loss += self.policy_network.train_on_batch(x, y)
+                    memory_learning_idx.append(itr_cnt, delay_reward)
 
-            batch_size = 0
+                batch_size = 0
 
         # 가시화 부분 p.117
-        # num_epoches_digit = len(str(num_epoches))
-        # epoch_str = str(epch+1).rjust(num_epoches_digit, '0')
+        num_epoches_digit = len(str(num_epoches))
+        epoch_str = str(epoch+1).rjust(num_epoches_digit, '0')
 
         # self.visualizer.plot(
         #     epoch_str=epoch_str, num_epoches=num_epoches, epsilon=epsilon,
@@ -166,9 +168,10 @@ class PolicyLearner:
 
         # log
         if pos_learning_cnt + neg_learning_cnt > 0:
-            loss /= pos_learing + neg_learning_cnt
-        logger.info("[Epoch %s/%s]\tEpsilon:%0.4f\t#Expl.:%d/%d\t"
+            loss /= pos_learning_cnt + neg_learning_cnt
+        logger.info("[Epoch %s/%s]\tEpsilon:%0.4f\t#Expl.:%d/%d\t" 
                     "#Buy:%d\t#Sell:%d\t#Hold:%d\t"
+                    "#Stocks:%d\tPV:%s\t"
                     "POS:%s\tNEG:%s\tLOSS:%10.6f" % (
                         epoch_str, num_epoches, epsilon, exploration_cnt, itr_cnt,
                         self.agent.num_buy, self.agent.num_sell, self.agent.num_hold,

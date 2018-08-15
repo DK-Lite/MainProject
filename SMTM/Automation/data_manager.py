@@ -3,7 +3,7 @@ import numpy as np
 
 def load_chart_data(fpath):
     chart_data = pd.read_csv(fpath, thousands=',', header=None)
-    chart_data.columns = ['data', 'open', 'high', 'low', 'close', 'volume']
+    chart_data.columns = ['date', 'open', 'high', 'low', 'close', 'volume']
     return chart_data
 
 def preprocess(chart_data):
@@ -50,11 +50,11 @@ def build_training_data(prep_data):
     return training_data
         
 
-chart_data = load_chart_data('chart_data/005930.csv')
-chart_data = preprocess(chart_data)
-chart_data = build_training_data(chart_data)
+# chart_data = load_chart_data('chart_data/005930.csv')
+# chart_data = preprocess(chart_data)
+# chart_data = build_training_data(chart_data)
 
-print(chart_data)
+# print(chart_data)
 
 
 

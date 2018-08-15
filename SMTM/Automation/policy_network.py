@@ -3,7 +3,7 @@
 # - 매수, 매도, 관망 행위에 대해서 PV를 높일수 있을지의 확률을 계산
 import numpy as np
 from keras.models import Sequential
-from keras.layers import Activation, LSTM, Dense, BatchNormalizeation
+from keras.layers import Activation, LSTM, Dense, BatchNormalization
 from keras.optimizers import sgd
 
 class PolicyNetwork:
@@ -14,11 +14,11 @@ class PolicyNetwork:
 
         self.model = Sequential()
         self.model.add(LSTM(256, input_shape=(1, input_dim), return_sequences=True, stateful=False, dropout=0.5))
-        self.model.add(BatchNormalizeation())
+        self.model.add(BatchNormalization())
         self.model.add(LSTM(256, return_sequences=True, stateful=False, dropout=0.5))
-        self.model.add(BatchNormalizeation())
+        self.model.add(BatchNormalization())
         self.model.add(LSTM(256, return_sequences=True, stateful=False, dropout=0.5))
-        self.model.add(BatchNormalizeation())
+        self.model.add(BatchNormalization())
         self.model.add(Dense(ouput_dim))
         self.model.add(Activation('sigmoid'))
 
@@ -30,7 +30,7 @@ class PolicyNetwork:
 
     def predict(self, sample):
         self.prob = self.model.predict(np.array(sample).reshape((1, -1, self.input_dim)))[0]
-        return self.prob
+        return self.prob[0]
 
     def train_on_batch(self, x, y):
         return self.model.train_on_batch(x, y)

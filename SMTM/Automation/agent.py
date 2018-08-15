@@ -55,9 +55,10 @@ class Agent:
 
 
     def set_balance(self, balance):
-        self.balance = balance
+        self.initial_balance = balance
 
     def get_states(self):
+
         self.ratio_hold = self.num_hold / int(self.portfolio_value / self.envinorment.get_price())
         self.ratio_portfolio_value = self.portfolio_value / self.initial_balance
 
