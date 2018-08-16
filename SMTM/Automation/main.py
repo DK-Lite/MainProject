@@ -52,11 +52,11 @@ if __name__ == '__main__':
     policy_learner = PolicyLearner(
         stock_code=stock_code, chart_data=chart_data, training_data=training_data,
         min_trading_unit=1, max_trading_unit=2, delayed_reward_threshold=.2, lr=.001)
-    policy_learner.fit(balance=10000000, num_epoches=10, discount_factor=0, start_epsilon=0.5)
+    policy_learner.fit(balance=10000000, num_epoches=1000, discount_factor=0, start_epsilon=0.5)
 
     model_dir = os.path.join(settings.BASE_DIR, 'models/%s' % stock_code)
+    if not os.path.isdir(model_dir):
+        os.makedirs(model_dir)
     model_path = os.path.join(model_dir, 'model_%s.h5' % timestr)
-    if not os.path.isdir(model_path):
-        os.makedirs(model_path)
 
     policy_learner.policy_network.save_model(model_path)

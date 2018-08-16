@@ -49,7 +49,7 @@ class Agent:
         self.num_buy                = 0
         self.num_sell               = 0
         self.num_hold               = 0
-        self.immediate_reward        = 0
+        self.immediate_reward       = 0
         self.ratio_hold             = 0
         self.ratio_portfolio_value  = 0
 
@@ -59,7 +59,7 @@ class Agent:
 
     def get_states(self):
 
-        self.ratio_hold = self.num_hold / int(self.portfolio_value / self.envinorment.get_price())
+        self.ratio_hold = self.num_hold / (self.portfolio_value / self.envinorment.get_price())
         self.ratio_portfolio_value = self.portfolio_value / self.initial_balance
 
         return (
@@ -125,7 +125,7 @@ class Agent:
             invest_amount   = curr_price * ( 1 - (self.TRADING_TAX + self.TRADING_CHARGE)) * trading_unit
             self.num_stocks -= trading_unit
             self.balance    -= invest_amount
-            self.num_buy    += 1
+            self.num_sell    += 1
 
         
         elif action == Agent.ACTION_HOLD:
