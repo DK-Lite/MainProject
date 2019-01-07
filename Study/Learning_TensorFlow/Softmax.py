@@ -44,3 +44,6 @@ with tf.Session() as sess :
 
 # print result
 print("Accuracy: {:.4}%".format(res*100))
+
+
+
