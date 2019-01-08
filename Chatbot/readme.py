@@ -1,10 +1,26 @@
-# Chat Bot
+
+### Chat Bot 개발 노트
 
 # 입력 데이터 : 한글 ( "안녕하세요", "나는 짐승입니다")
 
 
 # Intent → Entity → Context → Inference
 # (의도파악) → (개체파악) → (맥락파악) → (답변추론)
+
+# Word2Vec 로 Word를 Vec화 시키는 이유
+# 일반적인 RNN 방법으로도 Intent를 Classification 할수 있지만
+# 각 단어간의 유사성을 구분할수 없기에 분류 문제에서 높은 분류도를 보여주지 못한다
+# 그래서 단어간의 유사성을 고려하여 임베딩을 해주는 Word2Vec을 이용하여
+# Classification 을 시도할시 집단간의 분류를 명확하게 선을 그어 줄 수 있기때문에
+# Word2Vec → NN 을 이용하는것을 추천
+
+# ----- Intent ------
+# 의도파악 방법으로 
+# 주어진 Word 를 Input 으로 넣기 위해 indeㅌ Vector 화 필요
+# Word2Vec, One-Hot Vector, RNN Encoder ... 등등
+
+# Vectoc 화 된 단어를 분류기에 넣는다
+# 대표적인 Classifier → SVM, NN, Random Forest
 
 # ----- 단어 추출 -----
 # 우선 주어진 입력에서 단어만 뽑아내는 작업이 필요 → 구문분석 파트
