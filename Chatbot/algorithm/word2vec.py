@@ -86,3 +86,24 @@ def get_skipgram_batch(batch_size):
 
 
 print( skip_gram_pairs[0:10])
+
+
+with tf.name_scorpe("embeddings") :
+    embeddings = tf.Variable(tf.random_uniform([vocabulary_size, embedding_dimension],
+    -1.0, 1.0), name='embedding')
+
+    embed = tf.nnembedding_lookup(embeddings, train_inputs)
+
+
+nce_weights = tf.Variable(
+    tf.truncated_normal([vocabulary_size, embedding_dimension],
+    stddev=1.0 / math.sqrt(embedding_dimension)))
+
+nce_biases = tf.Variable(tf.zeros([vocabulary_size]))
+
+loss = tf.reduce_mean(
+    tf.nn.nce_loss(weights = nce_weights, biases = nce_biases, inputs = embed,
+    labels = train_labels, num_sampled = negative_samples, num_classes = vocabulary_size)
+
+)
+

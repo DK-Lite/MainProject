@@ -20,8 +20,18 @@ class NLU :
 
         # 구문분석
         y = SyntacticAnalysis(self.corpus, method="Hannanum", name="")
-
         
+        # Word2Vec
+
+
+        # Intent
+
+
+        # Entity
+
+        # reply
+    
+         
         return y
 
 
