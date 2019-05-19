@@ -1,7 +1,5 @@
 # Train data 테스트
 # 80% Train, 20% 테스트
-
-
 import tensorflow as tf
 import numpy as np
 
@@ -21,6 +19,7 @@ x = tf.placeholder( tf.float32, shape=[None, INPUT_SIZE] )
 y_ = tf.placeholder ( tf.float32, shape=[None, CLASSES] )
 
 tensor_map = { x: input_data, y_: lable_data }
+
 
 W_h1 = tf.Variable( tf.truncated_normal(shape=[INPUT_SIZE, HIDDEN1_SIZE], dtype=tf.float32) )
 b_h1 = tf.Variable( tf.zeros(shape=[HIDDEN1_SIZE]), dtype=tf.float32 )
