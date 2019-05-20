@@ -23,7 +23,8 @@ class dictionary:
 
     def add(self, word):
         self.data.append(word)
-
+    def size(self):
+        return len(self.data)
     # def add(self, words):
     #     # remove duplicate word 
     #     words = list(set(words))

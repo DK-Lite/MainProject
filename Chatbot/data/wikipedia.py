@@ -101,6 +101,7 @@ class WikiParser:
         for thread in threads:
             thread.join()
         print("# [Success] search words & End all thread")
+        
 
     def set_init_word(self, word):
         self.word_Q.put(word)
@@ -112,9 +113,6 @@ class WikiParser:
 
         while(True) :
 
-            if self.word_Q.qsize() % self.interval == 0 :
-               self.dictionary.update()
-
             if self.word_Q.empty() : break
             if self.word_Q.qsize() > self.max_num : break
 
@@ -125,25 +123,31 @@ class WikiParser:
             
             print("# [Success] find word:",search_word)
             self._insert_Q(_page)
+            self.dictionary.update()
 
+        self.dictionary.update()
 
 
 def __main__():
 
     folder_name = 'wordset'
-    file_name = '{}.txt'.format('word5000')
+    file_name = '{}.txt'.format('word20000')
     path = os.path.join(folder_name, file_name)
 
             
     #한글 사전 호출
     korea_words = dictionary()
     korea_words.load(path)
+    print(korea_words.size())
     #korea_words.print()
 
     #WikiPaser
-    parser = WikiParser(max_num=5000, interval=1000)
+    parser = WikiParser(max_num=20000, interval=1000)
     parser.set_dict(korea_words)
-    parser.set_init_word("스파게티")
+    parser.set_init_word("카페")
+    parser.set_init_word("태종대")
+    parser.set_init_word("온천")
+    #parser.set_init_word("음식")
     parser.run()
 
 
